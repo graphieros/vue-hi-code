@@ -30,32 +30,33 @@ cosnt foo = function(param) {
 
 ## Props
 
-| Name                 | Type                   | Required | Default                  |
-| -------------------- | ---------------------- | -------- | ------------------------ |
-| content              | string                 | yes      |                          |
-| language             | "javascript" or "html" | yes      |                          |
-| title                | string                 | no       | ""                       |
-| withCopy             | boolean                | no       | true                     |
-| withLineNumbers      | boolean                | no       | false                    |
-| borderRadius         | string                 | no       | "0.3rem"                 |
-| padding              | string                 | no       | "1rem"                   |
-| fontFamily           | string                 | no       | "'Fira code', monospace" |
-| fontSize             | string                 | no       | "1rem"                   |
-| backgroundColor      | string                 | no       | "#2A2A2A"                |
-| baseTextColor        | string                 | no       | "#CCCCCC"                |
-| colorKeywords        | string                 | no       | "#B37BAE"                |
-| colorVariableKeyword | string                 | no       | "#559AD3"                |
-| colorFunction        | string                 | no       | "#DCDCAA"                |
-| colorNumber          | string                 | no       | "#AEC6A1"                |
-| colorString          | string                 | no       | "#CD9077"                |
-| colorParenthesis     | string                 | no       | "#8A8A8A"                |
-| colorBrackets        | string                 | no       | "#559AD3"                |
-| colorComment         | string                 | no       | "#8A8A8A"                |
-| colorHtmlTag         | string                 | no       | "#559AD3"                |
-| copyIconColor        | string                 | no       | "#CCCCCC"                |
-| colorLineNumber      | string                 | no       | "#8A8A8A"                |
-| copyIconSize         | number                 | no       | 20                       |
-| copyIconStrokeWidth  | number                 | no       | 1.5                      |
+| Name                 | Type                            | Required | Default                  |
+| -------------------- | ------------------------------- | -------- | ------------------------ |
+| backgroundColor      | string                          | no       | "#2A2A2A"                |
+| baseTextColor        | string                          | no       | "#CCCCCC"                |
+| borderRadius         | string                          | no       | "0.3rem"                 |
+| colorBrackets        | string                          | no       | "#559AD3"                |
+| colorComment         | string                          | no       | "#8A8A8A"                |
+| colorCssSelector     | string                          | no       | "#D7BA7D"                |
+| colorFunction        | string                          | no       | "#DCDCAA"                |
+| colorHtmlTag         | string                          | no       | "#559AD3"                |
+| colorKeywords        | string                          | no       | "#B37BAE"                |
+| colorLineNumber      | string                          | no       | "#8A8A8A"                |
+| colorNumber          | string                          | no       | "#AEC6A1"                |
+| colorParenthesis     | string                          | no       | "#8A8A8A"                |
+| colorString          | string                          | no       | "#CD9077"                |
+| colorVariableKeyword | string                          | no       | "#559AD3"                |
+| content              | string                          | yes      |                          |
+| copyIconColor        | string                          | no       | "#CCCCCC"                |
+| copyIconSize         | number                          | no       | 20                       |
+| copyIconStrokeWidth  | number                          | no       | 1.5                      |
+| fontFamily           | string                          | no       | "'Fira code', monospace" |
+| fontSize             | string                          | no       | "1rem"                   |
+| language             | "javascript" or "html" or "css" | yes      |                          |
+| padding              | string                          | no       | "1rem"                   |
+| title                | string                          | no       | ""                       |
+| withCopy             | boolean                         | no       | true                     |
+| withLineNumbers      | boolean                         | no       | false                    |
 
 ## Emits
 
