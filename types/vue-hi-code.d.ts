@@ -30,5 +30,6 @@ declare module 'vue-hi-code' {
         colorComment?: string
         colorHtmlTag?: string
         colorLineNumber?: string;
+        colorCssSelector?: string;
     }>
 }
