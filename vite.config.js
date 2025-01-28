@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { copyFileSync } from 'node:fs'
 import { resolve } from "path";
 import vue from "@vitejs/plugin-vue";
 
@@ -8,6 +9,16 @@ const prod = process.env.NODE_ENV === 'production';
 export default defineConfig({
   plugins: [
     vue(),
+    {
+      name: "copy-readme", // Custom plugin to copy README.md
+      apply: "build",
+      closeBundle() {
+        const source = resolve(__dirname, "README.md");
+        const destination = resolve(__dirname, "dist/README.md");
+        copyFileSync(source, destination);
+        console.log("README.md copied to dist/");
+      },
+    },
   ],
   build: {
     lib: {

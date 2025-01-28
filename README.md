@@ -1,5 +1,10 @@
 # vue-hi-code
 
+[![npm](https://img.shields.io/npm/v/vue-hi-code)](https://github.com/graphieros/vue-hi-code)
+[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/graphieros/vue-hi-code?tab=MIT-1-ov-file#readme)
+[![GitHub issues](https://img.shields.io/github/issues/graphieros/vue-hi-code)](https://github.com/graphieros/vue-hi-code/issues)
+[![npm](https://img.shields.io/npm/dt/vue-hi-code)](https://github.com/graphieros/vue-hi-code)
+
 A light Vue 3 component to display javascript snippets.
 
 ```sh
@@ -7,7 +12,6 @@ npm i vue-hi-code
 ```
 
 ![image](https://github.com/user-attachments/assets/07707d06-8285-44a4-a607-192346dfd133)
-
 
 ```js
 import { VueHiCode } from "vue-hi-code";
