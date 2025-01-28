@@ -1,5 +1,5 @@
 import './assets/main.css'
-import '../dist/vue-hi-code.css'
+// import 'vue-hi-code/index.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'

@@ -17,10 +17,32 @@ async function copyCode() {
 
 const contentHTML = ref(`<div class="test">content</div>`)
 
+const contentCSS = ref(`
+div {
+  font-size: 12px;
+}
+
+/* This is some comment */
+div::after {
+  content: ''; /* and this is a comment */
+}
+
+button.dude > span:not(.moron) ~ .cock {
+  color: red;
+  font-size: 12px;
+  background: radial-gradient(at top left, #6376DD, #FFFFFF);
+}
+`)
+
 </script>
 
 <template>
   <main>
+    <TestVueHiCode
+      language="css"
+      :content="contentCSS"
+    />
+
     <TestVueHiCode
       with-copy
       with-line-numbers
@@ -49,7 +71,7 @@ const contentHTML = ref(`<div class="test">content</div>`)
       color-line-number="#8A8A8A"
       :copy-icon-size="20"
       :copy-icon-stroke-width="1.5"
-
+      color-css-selector="#D7BA7D"
     >
     </TestVueHiCode>
     <TestVueHiCode
