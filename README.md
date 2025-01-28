@@ -15,6 +15,7 @@ npm i vue-hi-code
 
 ```js
 import { VueHiCode } from "vue-hi-code";
+import "vue-hi-code/style.css"; // Include the css
 
 const content = `
 cosnt foo = function(param) {

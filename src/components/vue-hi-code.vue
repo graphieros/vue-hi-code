@@ -297,6 +297,7 @@ async function copyCode() {
 <style scoped>
 .code-wrapper {
     position: relative;
+    display: block;
 }
 
 .code-copy {

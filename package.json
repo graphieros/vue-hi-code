@@ -1,6 +1,6 @@
 {
   "name": "vue-hi-code",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "private": false,
   "type": "module",
   "description": "A simple and customizable code highlighter component for Vue 3 to showcase javascript snippets.",
@@ -26,6 +26,7 @@
     },
     "./style.css": "./dist/style.css"
   },
+  "style": "dist/style.css",
   "main": "dist/vue-hi-code.cjs",
   "module": "dist/vue-hi-code.js",
   "types": "dist/types/vue-hi-code.d.ts",
@@ -44,7 +45,7 @@
     "test": "vitest",
     "test:w": "vitest --watch",
     "clean": "node cleanup.cjs",
-    "prod": "node del-dev-dep.cjs && npm run clean && vite build --mode production && node copy-types.cjs"
+    "prod": "node del-dev-dep.cjs && npm run clean && vite build --mode production && node copy-types.cjs && node post-build.cjs"
   },
   "dependencies": {
     "vue": "^3.5.13"
