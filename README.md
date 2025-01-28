@@ -6,6 +6,9 @@ A light Vue 3 component to display javascript snippets.
 npm i vue-hi-code
 ```
 
+![image](https://github.com/user-attachments/assets/07707d06-8285-44a4-a607-192346dfd133)
+
+
 ```js
 import { VueHiCode } from "vue-hi-code";
 
