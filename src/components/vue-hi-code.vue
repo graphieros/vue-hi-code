@@ -119,6 +119,11 @@ const props = defineProps({
     colorHtmlTag: {
         type: String,
         default: '#559AD3'
+    },
+    // CSS
+    colorCssSelector: {
+        type: String,
+        default: '#D7BA7D'
     }
 });
 
@@ -131,7 +136,7 @@ function highlightCode(code, language) {
         // Very basic html parsing for now
 
         const htmlTagPattern = /(<\/?)([a-zA-Z0-9-]+)([^<]*?)(\/?>)/g;
-        code = code.replace(htmlTagPattern, (match, openingBracket, tagName, attributes, closingBracket) => {
+        code = code.replace(htmlTagPattern, (_, openingBracket, tagName, attributes, closingBracket) => {
             const highlightedTagName = `<span class="code-tag-name">${tagName}</span>`;
             return (
                 `&lt;${openingBracket === '</' ? '/' : ''}` +
@@ -140,9 +145,26 @@ function highlightCode(code, language) {
                 `${closingBracket === '/>' ? ' /' : ''}&gt;`
             );
         });
-    }
+    } else if (language === "css") {
+        code = code
+        // Comments
+        .replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>')
 
-    else if (language === 'javascript') {
+        // Selectors after closing braces
+        .replace(/(?<=\}[\s]*)\/*([\s\S]*?)(?=\{)/g, (_, selector) => {
+            // Selectors found in between } and { with span class="selector"
+            return `\n<span class="selector">${selector.trim()} </span>`;
+        })
+
+        // Selectors that appear at the beginning of the CSS
+        .replace(/^([^\{]+)\s*(?=\{)/g, (_, selector) => {
+            return `<span class="selector">${selector.trim()} </span>`;
+        })
+
+        // Insert line breaks between closing braces and next selector
+        .replace(/<\/span>\s*(?=\w)/g, '</span>\n')
+
+    } else if (language === 'javascript') {
         const keywords = /\b(?:const|let|var|function|return|if|else|for|while|switch|case|break|continue|try|catch|throw|class|extends|import|export|default|new|async|await)\b/g;
 
         const functionNamePattern = /\b([a-zA-Z_]\w*)\s*(?=\()/g;
@@ -289,6 +311,8 @@ async function copyCode() {
                 '--padding': padding,
                 '--title-font-family': titleFontFamily,
                 '--title-font-size': titleFontSize,
+                //CSS
+                '--color-css-selector': colorCssSelector
             }"
         />
     </code>
@@ -388,7 +412,11 @@ async function copyCode() {
 /* HTML Tag Names */
 ::v-deep(.code-tag-name) {
     color: var(--color-html-tag);
-    font-weight: bold;
+}
+
+/* CSS selectors */
+::v-deep(.selector) {
+    color: var(--color-css-selector);
 }
 
 ::v-deep(.code-line-number) {
@@ -400,4 +428,5 @@ async function copyCode() {
     text-align: right;
     width: 3ch;
 }
+
 </style>
