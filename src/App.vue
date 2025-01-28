@@ -5,26 +5,15 @@ import { ref } from "vue";
 
 import TestVueHiCode from "./components/vue-hi-code.vue";
 
-const contentJs = ref(`const bar = 123;
-// Some comment
-const baz = "let me const do var";
-const c = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-defineEmits();
-
-/*
-* Some other comment
-*/
-function foo() {
-  return bar;
-}
-
-for(let i = 0; i < 10; i += 1) {
-  dude.push(x + i)
-}
-
-console.log(test[0])
-
-`)
+const contentJs = ref(`// Not all comments are bad
+async function copyCode() {
+    try {
+        await navigator.clipboard.writeText(props.content);
+        emit('copy', props.content);
+    } catch (err) {
+        console.error('Failed to copy text: ', err);
+    }
+}`)
 
 const contentHTML = ref(`<div class="test">content</div>`)
 
@@ -32,7 +21,7 @@ const contentHTML = ref(`<div class="test">content</div>`)
 
 <template>
   <main>
-    <TestVueHiCode 
+    <TestVueHiCode
       with-copy
       with-line-numbers
       :content="contentJs" 
