@@ -1,6 +1,6 @@
 {
   "name": "vue-hi-code",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": false,
   "type": "module",
   "description": "A simple and customizable code highlighter component for Vue 3 to showcase javascript snippets.",
@@ -9,6 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/graphieros/vue-hi-code.git"
   },
+  "homepage": "https://vue-hi-code.graphieros.com/",
   "license": "MIT",
   "files": [
     "dist"

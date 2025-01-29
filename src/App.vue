@@ -18,7 +18,7 @@ async function copyCode() {
 const contentHTML = ref(`<div class="test">content</div>`)
 
 const contentCSS = ref(`
-div {
+.my-class {
   font-size: 12px;
 }
 
