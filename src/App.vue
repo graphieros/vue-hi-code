@@ -5,17 +5,26 @@ import { ref } from "vue";
 
 import TestVueHiCode from "./components/vue-hi-code.vue";
 
-const contentJs = ref(`// Not all comments are bad
+const contentJs = ref(`// Not all comments are bad...
+
+const num = 33.33;
+const variableName = 'variable__name';
+const BIG_CONST = () => {};
+const operations = 1 + 2 - 3 / (4 * 8);
+
 async function copyCode() {
     try {
         await navigator.clipboard.writeText(props.content);
-        emit('copy', props.content);
+        emit('copy.test', props.content);
     } catch (err) {
         console.error('Failed to copy text: ', err);
     }
 }`)
 
-const contentHTML = ref(`<div class="test">content</div>`)
+const contentHTML = ref(`<div class="flex flex-col gap-1">
+  <label for="id">label</label>
+  <input type="number" min="0" max="100"/>
+</div>`)
 
 const contentCSS = ref(`
 .my-class {
@@ -72,6 +81,7 @@ button.dude > span:not(.moron) ~ .cock {
       :copy-icon-size="20"
       :copy-icon-stroke-width="1.5"
       color-css-selector="#D7BA7D"
+      line-height="1.4rem"
     >
     </TestVueHiCode>
     <TestVueHiCode
@@ -79,8 +89,8 @@ button.dude > span:not(.moron) ~ .cock {
       language="html"
     />
     <VueHiCode 
-      with-copy
-      :with-line-numbers="false"
+    with-copy
+      with-line-numbers
       :content="contentJs" 
       language="javascript"
       title="index.js"
@@ -106,6 +116,8 @@ button.dude > span:not(.moron) ~ .cock {
       color-line-number="#8A8A8A"
       :copy-icon-size="20"
       :copy-icon-stroke-width="1.5"
+      color-css-selector="#D7BA7D"
+      line-height="1.4rem"
     />
   </main>
 </template>

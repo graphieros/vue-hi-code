@@ -2,34 +2,35 @@ declare module 'vue-hi-code' {
     import { DefineComponent } from "vue";
 
     export const VueHiCode: DefineComponent<{
+        backgroundColor?: string
+        baseTextColor?: string
+        borderRadius?: string
+        colorBrackets?: string
+        colorComment?: string
+        colorCssSelector?: string;
+        colorFunction?: string
+        colorHtmlTag?: string
+        colorKeywords?: string
+        colorLineNumber?: string;
+        colorNumber?: string
+        colorParenthesis?: string
+        colorPunctuation?: string
+        colorString?: string
+        colorTitle?: string
+        colorVariableKeyword?: string
         content: string
-        language: 'javascript' | 'html'
-        title?: string
-        withCopy?: boolean
-        withLineNumbers?: boolean
         copyIconColor?: string
         copyIconSize?: number
         copyIconStrokeWidth?: number
-        borderRadius?: string
-        padding?: string
         fontFamily?: string
         fontSize?: string
-        titleFontSize?: string
+        language: 'javascript' | 'html' | 'css'
+        lineHeight?: string;
+        padding?: string
+        title?: string
         titleFontFamily?: string
-        colorTitle?: string
-        backgroundColor?: string
-        baseTextColor?: string
-        colorKeywords?: string
-        colorVariableKeyword?: string
-        colorFunction?: string
-        colorNumber?: string
-        colorString?: string
-        colorParenthesis?: string
-        colorPunctuation?: string
-        colorBrackets?: string
-        colorComment?: string
-        colorHtmlTag?: string
-        colorLineNumber?: string;
-        colorCssSelector?: string;
+        titleFontSize?: string
+        withCopy?: boolean
+        withLineNumbers?: boolean
     }>
 }

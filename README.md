@@ -57,6 +57,7 @@ cosnt foo = function(param) {
 | title                | string                          | no       | ""                       |
 | withCopy             | boolean                         | no       | true                     |
 | withLineNumbers      | boolean                         | no       | false                    |
+| lineHeight           | string                          | no       | "1.4rem"                 |
 
 ## Emits
 

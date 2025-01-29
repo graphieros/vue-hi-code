@@ -50,6 +50,10 @@ const props = defineProps({
         type: String,
         default: '1rem'
     },
+    lineHeight: {
+        type: String,
+        default: '1.4rem'
+    },
     // FONTS
     fontFamily: {
         type: String,
@@ -308,6 +312,7 @@ async function copyCode() {
                 '--color-variable-keyword': colorVariableKeyword,
                 '--font-family': fontFamily,
                 '--font-size': fontSize,
+                '--line-height': lineHeight,
                 '--padding': padding,
                 '--title-font-family': titleFontFamily,
                 '--title-font-size': titleFontSize,
@@ -355,6 +360,7 @@ async function copyCode() {
     padding: var(--padding);
     white-space: pre-wrap;
     word-wrap: break-word;
+    line-height: var(--line-height);
 }
 
 ::v-deep(.code-title) {
@@ -362,7 +368,6 @@ async function copyCode() {
     color: var(--color-title);
     font-family: var(--title-font-family);
     font-size: var(--title-font-size);
-    margin-bottom: 1rem;
     padding: 0.5rem 0 1rem 0;
 }
 
@@ -386,8 +391,12 @@ async function copyCode() {
 }
 
 /* Strings */
-::v-deep(.code-string) {
+::v-deep(.code-string){
     color: var(--color-string);
+}
+
+::v-deep(.code-string) * {
+    color: var(--color-string) !important;
 }
 
 /* Parenthesis */
@@ -398,6 +407,12 @@ async function copyCode() {
 ::v-deep(.code-punctuation) {
     color: var(--color-punctuation);
 }
+
+/* Commas, semicolons, colons */
+::v-deep(.code-punctuation) {
+    color: var(--color-punctuation);
+}
+
 /* Brackets */
 ::v-deep(.code-brackets) {
     color: var(--color-brackets);
@@ -407,6 +422,9 @@ async function copyCode() {
 ::v-deep(.code-comment) {
     color: var(--color-comment);
     font-style: italic;
+}
+::v-deep(.code-comment) *{
+    color: var(--color-comment) !important;
 }
 
 /* HTML Tag Names */
