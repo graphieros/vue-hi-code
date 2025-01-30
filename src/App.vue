@@ -43,6 +43,12 @@ button.dude > span:not(.moron) ~ .cock {
 }
 `)
 
+const contentError = ref(`TypeError: Cannot read properties of undefined (reading 'map')
+  at Rc.fn (Filename.js:12:45)
+  at ys (index.js:10:120)
+  at get value (index.js:10:552)
+`)
+
 </script>
 
 <template>
@@ -50,6 +56,12 @@ button.dude > span:not(.moron) ~ .cock {
     <TestVueHiCode
       language="css"
       :content="contentCSS"
+    />
+
+    <TestVueHiCode
+      :content="contentError"
+      language="error"
+      color-error="#E46962"
     />
 
     <TestVueHiCode

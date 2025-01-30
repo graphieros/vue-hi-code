@@ -8,6 +8,7 @@ declare module 'vue-hi-code' {
         colorBrackets?: string
         colorComment?: string
         colorCssSelector?: string;
+        colorError?: string
         colorFunction?: string
         colorHtmlTag?: string
         colorKeywords?: string
@@ -24,7 +25,7 @@ declare module 'vue-hi-code' {
         copyIconStrokeWidth?: number
         fontFamily?: string
         fontSize?: string
-        language: 'javascript' | 'html' | 'css'
+        language: 'javascript' | 'html' | 'css' | 'error'
         lineHeight?: string;
         padding?: string
         title?: string

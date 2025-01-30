@@ -38,6 +38,7 @@ cosnt foo = function(param) {
 | colorBrackets        | string                          | no       | "#559AD3"                |
 | colorComment         | string                          | no       | "#8A8A8A"                |
 | colorCssSelector     | string                          | no       | "#D7BA7D"                |
+| colorError           | string                          | no       | "#E46962"                |
 | colorFunction        | string                          | no       | "#DCDCAA"                |
 | colorHtmlTag         | string                          | no       | "#559AD3"                |
 | colorKeywords        | string                          | no       | "#B37BAE"                |

@@ -124,6 +124,10 @@ const props = defineProps({
         type: String,
         default: '#559AD3'
     },
+    colorError: {
+        type: String,
+        default: '#E46962'
+    },
     // CSS
     colorCssSelector: {
         type: String,
@@ -241,6 +245,8 @@ function highlightCode(code, language) {
         code = code.replaceAll(';', `<span class="code-punctuation">;</span>`);
         code = code.replaceAll('.', `<span class="code-punctuation">.</span>`);
         code = code.replaceAll(',', `<span class="code-punctuation">,</span>`);
+    } else if (language === 'error') {
+        code = `<div class="code-error">${code}</div>`;
     }
 
     let codeWithTitle = code;
@@ -316,10 +322,14 @@ async function copyCode() {
                 '--padding': padding,
                 '--title-font-family': titleFontFamily,
                 '--title-font-size': titleFontSize,
-                //CSS
-                '--color-css-selector': colorCssSelector
+                // CSS
+                '--color-css-selector': colorCssSelector,
             }"
         />
+        <div v-if="language === 'error'" class="error-wrapper" :style="{
+            '--color-error': colorError,
+            '--border-radius': borderRadius
+        }" />
     </code>
 </template>
 
@@ -361,6 +371,19 @@ async function copyCode() {
     white-space: pre-wrap;
     word-wrap: break-word;
     line-height: var(--line-height);
+}
+
+.error-wrapper {
+    background: var(--color-error);
+    border-radius: var(--border-radius);
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0.2;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
 }
 
 ::v-deep(.code-title) {
