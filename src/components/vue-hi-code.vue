@@ -141,8 +141,6 @@ const highlightedCode = computed(() => highlightCode(props.content, props.langua
 
 function highlightCode(code, language) {
     if (language === 'html') {
-        // Very basic html parsing for now
-
         const htmlTagPattern = /(<\/?)([a-zA-Z0-9-]+)([^<]*?)(\/?>)/g;
         code = code.replace(htmlTagPattern, (_, openingBracket, tagName, attributes, closingBracket) => {
             const highlightedTagName = `<span class="code-tag-name">${tagName}</span>`;
@@ -153,6 +151,11 @@ function highlightCode(code, language) {
                 `${closingBracket === '/>' ? ' /' : ''}&gt;`
             );
         });
+
+        code = code.replace(/<!--[\s\S]*?-->/g, match => {
+            return `<span class="code-comment">${match.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>`;
+        });
+        
     } else if (language === "css") {
         code = code
         // Comments

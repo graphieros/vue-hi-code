@@ -22,6 +22,7 @@ async function copyCode() {
 }`)
 
 const contentHTML = ref(`<div class="flex flex-col gap-1">
+  <!-- This is a comment -->
   <label for="id">label</label>
   <input type="number" min="0" max="100"/>
 </div>`)
