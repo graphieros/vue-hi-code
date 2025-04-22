@@ -11,6 +11,7 @@ declare module 'vue-hi-code' {
         colorError?: string
         colorFunction?: string
         colorHtmlTag?: string
+        colorJsReserved?: string
         colorKeywords?: string
         colorLineNumber?: string;
         colorNumber?: string
@@ -25,7 +26,7 @@ declare module 'vue-hi-code' {
         copyIconStrokeWidth?: number
         fontFamily?: string
         fontSize?: string
-        language: 'javascript' | 'html' | 'css' | 'error'
+        language: 'javascript' | 'typescript' | 'html' | 'css' | 'error'
         lineHeight?: string;
         padding?: string
         title?: string

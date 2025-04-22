@@ -41,6 +41,7 @@ cosnt foo = function(param) {
 | colorError           | string                          | no       | "#E46962"                |
 | colorFunction        | string                          | no       | "#DCDCAA"                |
 | colorHtmlTag         | string                          | no       | "#559AD3"                |
+| colorJsReserved      | string                          | no       | "#4ec9b0"                |
 | colorKeywords        | string                          | no       | "#B37BAE"                |
 | colorLineNumber      | string                          | no       | "#8A8A8A"                |
 | colorNumber          | string                          | no       | "#AEC6A1"                |
@@ -54,11 +55,11 @@ cosnt foo = function(param) {
 | fontFamily           | string                          | no       | "'Fira code', monospace" |
 | fontSize             | string                          | no       | "1rem"                   |
 | language             | "javascript" or "html" or "css" | yes      |                          |
+| lineHeight           | string                          | no       | "1.4rem"                 |
 | padding              | string                          | no       | "1rem"                   |
 | title                | string                          | no       | ""                       |
 | withCopy             | boolean                         | no       | true                     |
 | withLineNumbers      | boolean                         | no       | false                    |
-| lineHeight           | string                          | no       | "1.4rem"                 |
 
 ## Emits
 

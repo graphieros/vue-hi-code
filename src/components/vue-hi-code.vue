@@ -116,6 +116,10 @@ const props = defineProps({
         type: String,
         default: '#559AD3'
     },
+    colorJsReserved: {
+        type: String,
+        default: 'rgb(78, 201, 176)'
+    },
     colorComment: {
         type: String,
         default: '#8A8A8A'
@@ -132,7 +136,7 @@ const props = defineProps({
     colorCssSelector: {
         type: String,
         default: '#D7BA7D'
-    }
+    },
 });
 
 const emit = defineEmits(['copy']);
@@ -155,99 +159,84 @@ function highlightCode(code, language) {
         code = code.replace(/<!--[\s\S]*?-->/g, match => {
             return `<span class="code-comment">${match.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>`;
         });
-        
+
     } else if (language === "css") {
         code = code
-        // Comments
-        .replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>')
+            // Comments
+            .replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>')
 
-        // Selectors after closing braces
-        .replace(/(?<=\}[\s]*)\/*([\s\S]*?)(?=\{)/g, (_, selector) => {
-            // Selectors found in between } and { with span class="selector"
-            return `\n<span class="selector">${selector.trim()} </span>`;
-        })
+            // Selectors after closing braces
+            .replace(/(?<=\}[\s]*)\/*([\s\S]*?)(?=\{)/g, (_, selector) => {
+                // Selectors found in between } and { with span class="selector"
+                return `\n<span class="selector">${selector.trim()} </span>`;
+            })
 
-        // Selectors that appear at the beginning of the CSS
-        .replace(/^([^\{]+)\s*(?=\{)/g, (_, selector) => {
-            return `<span class="selector">${selector.trim()} </span>`;
-        })
+            // Selectors that appear at the beginning of the CSS
+            .replace(/^([^\{]+)\s*(?=\{)/g, (_, selector) => {
+                return `<span class="selector">${selector.trim()} </span>`;
+            })
 
-        // Insert line breaks between closing braces and next selector
-        .replace(/<\/span>\s*(?=\w)/g, '</span>\n')
+            // Insert line breaks between closing braces and next selector
+            .replace(/<\/span>\s*(?=\w)/g, '</span>\n')
 
-    } else if (language === 'javascript') {
-        const keywords = /\b(?:const|let|var|function|return|if|else|for|while|switch|case|break|continue|try|catch|throw|class|extends|import|export|default|new|async|await)\b/g;
+    } else if (['javascript', 'typescript'].includes(language)) {
+        // 1) Temporarily replace angle brackets
+        code = code.replace(/</g, '‹').replace(/>/g, '›');
 
-        const functionNamePattern = /\b([a-zA-Z_]\w*)\s*(?=\()/g;
-        const stringPattern = /(["'])(?:(?=(\\?))\2.)*?\1/g;
+        // 2) Define keyword lists
+        const baseKeywords = ['const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while', 'switch', 'case', 'break', 'continue', 'try', 'catch', 'throw', 'class', 'extends', 'import', 'export', 'default', 'new', 'async', 'await'];
+        const tsKeywords = ['type', 'interface', 'enum', 'implements', 'public', 'private', 'protected', 'readonly', 'abstract', 'namespace', 'declare', 'module', 'from', 'as', 'keyof', 'infer', 'instanceof', 'typeof', 'never', 'unknown', 'any', 'void', 'boolean', 'number', 'string', 'symbol', 'bigint'];
+        const allKeywords = Array.from(new Set([...baseKeywords, ...(language === 'typescript' ? tsKeywords : [])]));
+        const keywordsPattern = new RegExp(`\\b(?:${allKeywords.join('|')})\\b`, 'g');
+        const functionNamePattern = /\b([a-zA-Z_][\w]*)\s*(?=\()/g;
+        const stringPattern = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
         const commentPattern = /(\/\*[\s\S]*?\*\/|\/\/.*)/g;
-        const variablePattern = /(?<!["'`])\b(?:const|let|var)\b\s+([a-zA-Z_$][\w$]*)(?!["'`])(?=(?:[^"'`]*["'`][^"'`]*["'`])*[^"'`]*$)/g;
-        const numberPattern = /\b\d+(\.\d+)?\b/g;
+        const variablePattern = /(?<!["'`])\\b(?:const|let|var)\\b\s+([a-zA-Z_$][\w$]*)(?!["'`])(?=(?:[^"'`]*["'`][^"'`]*["'`])*[^"'`]*)/g;
+        const numberPattern = /\\b\d+(\.\d+)?\\b/g;
 
-        const variablePlaceholders = [];
-        const keywordPlaceholders = [];
+        // 3) Extract placeholders
+        const placeholders = { keys: [], vars: [], strs: [], comms: [], nums: [] };
+        let tmp = code
+            .replace(variablePattern, (m, v) => { placeholders.keys.push(m.split(' ')[0]); placeholders.vars.push(v); return `__KEYWORD_PLACEHOLDER_${placeholders.keys.length - 1}__ ${v}`; })
+            .replace(stringPattern, m => { placeholders.strs.push(m); return `__STRING_PLACEHOLDER_${placeholders.strs.length - 1}__`; })
+            .replace(commentPattern, m => { placeholders.comms.push(m); return `__COMMENT_PLACEHOLDER_${placeholders.comms.length - 1}__`; })
+            .replace(numberPattern, m => { placeholders.nums.push(m); return `__NUMBER_PLACEHOLDER_${placeholders.nums.length - 1}__`; });
 
-        const codeWithVariables = code.replace(variablePattern, (match, variableName) => {
-            const keyword = match.split(' ')[0];
-            variablePlaceholders.push(variableName);
-            keywordPlaceholders.push(keyword);
+        // 4) Highlight keywords & function calls
+        tmp = tmp
+            .replace(keywordsPattern, '<span class="code-keyword">$&</span>')
+            .replace(functionNamePattern, '<span class="code-function">$1</span>');
 
-            return `__KEYWORD_PLACEHOLDER_${keywordPlaceholders.length - 1}__ ${variableName}`;
-        });
+        // 5) Restore placeholders & punctuations
+        tmp = tmp
+            .replace(/__COMMENT_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-comment">${placeholders.comms[i]}</span>`)
+            .replace(/__STRING_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-string">${placeholders.strs[i]}</span>`)
+            .replace(/__KEYWORD_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-variable-keyword">${placeholders.keys[i]}</span>`)
+            .replace(/__NUMBER_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-number">${placeholders.nums[i]}</span>`)
+            .replace(/\(/g, `<span class="code-parens">(</span>`)
+            .replace(/\)/g, `<span class="code-parens">)</span>`)
+            .replace(/\{/g, `<span class="code-parens">{</span>`)
+            .replace(/\}/g, `<span class="code-parens">}</span>`)
+            .replace(/\[/g, `<span class="code-brackets">[</span>`)
+            .replace(/\]/g, `<span class="code-brackets">]</span>`)
+            .replace(/;/g, `<span class="code-punctuation">;</span>`)
+            .replace(/\./g, `<span class="code-punctuation">.</span>`)
+            .replace(/,/g, `<span class="code-punctuation">,</span>`);
 
-        const stringPlaceholders = [];
-        const codeWithStrings =  codeWithVariables.replace(stringPattern, (match) => {
-            stringPlaceholders.push(match);
-            return `__STRING_PLACEHOLDER_${stringPlaceholders.length - 1}__`;
-        });
+        // 6) Restore generics-only angle brackets
+        // Opening: only ‹ before identifier, not "<=", not "=>"
+        tmp = tmp.replace(/‹(?=[A-Za-z_$])/g, `<span class="code-brackets">&lt;</span>`);
+        // Closing: only › after identifier, not ">=", not "=>"
+        tmp = tmp.replace(/(?<=[A-Za-z0-9_$])›/g, `<span class="code-brackets">&gt;</span>`);
+        // 7) Fallback for any remaining standalone delimiters (comparisons, arrows)
+        tmp = tmp.replace(/‹/g, `<span class="code-punctuation">&lt;</span>`)
+            .replace(/›/g, `<span class="code-punctuation">&gt;</span>`);
 
-        const commentPlaceholders = [];
-        const codeWithComments = codeWithStrings.replace(commentPattern, (match) => {
-            commentPlaceholders.push(match);
-            return `__COMMENT_PLACEHOLDER_${commentPlaceholders.length - 1}__`;
-        });
+        // 8) Highlight reserved globals
+        const reservedPattern = /\b(?:Array|String|RegExp|Date|Promise|Map|Set|WeakMap|WeakSet|Symbol|Math|JSON|Reflect|Proxy)\b/g;
+        tmp = tmp.replace(reservedPattern, '<span class="code-js-reserved">$&</span>');
 
-        const numberPlaceholders = [];
-        const codeWithNumbers = codeWithComments.replace(numberPattern, (match) => {
-            numberPlaceholders.push(match);
-            return `__NUMBER_PLACEHOLDER_${numberPlaceholders.length - 1}__`;
-        });
-
-        code = codeWithNumbers
-            .replace(keywords, '<span class="code-keyword">$&</span>')
-            .replace(functionNamePattern, '<span class="code-function">$1</span>')
-
-        code = code.replace(/__COMMENT_PLACEHOLDER_(\d+)__/g, (_, index) => {
-            const comment = commentPlaceholders[index];
-            return `<span class="code-comment">${comment}</span>`;
-        });
-
-        code = code.replace(/__STRING_PLACEHOLDER_(\d+)__/g, (_, index) => {
-            const string = stringPlaceholders[index];
-            return `<span class="code-string">${string}</span>`;
-        });
-
-        code = code.replace(/__KEYWORD_PLACEHOLDER_(\d+)__/g, (_, index) => {
-            const keyword = keywordPlaceholders[index];
-            return `<span class="code-variable-keyword">${keyword}</span>`;
-        });
-
-        code = code.replace(/__NUMBER_PLACEHOLDER_(\d+)__/g, (_, index) => {
-            const number = numberPlaceholders[index];
-            return `<span class="code-number">${number}</span>`;
-        });
-
-        code = code.replaceAll('(', `<span class="code-parens">(</span>`);
-        code = code.replaceAll(')', `<span class="code-parens">)</span>`);
-        code = code.replaceAll('{', `<span class="code-parens">{</span>`);
-        code = code.replaceAll('}', `<span class="code-parens">}</span>`);
-
-        code = code.replaceAll('[', `<span class="code-brackets">[</span>`);
-        code = code.replaceAll(']', `<span class="code-brackets">]</span>`);
-
-        code = code.replaceAll(';', `<span class="code-punctuation">;</span>`);
-        code = code.replaceAll('.', `<span class="code-punctuation">.</span>`);
-        code = code.replaceAll(',', `<span class="code-punctuation">,</span>`);
+        code = tmp;
     } else if (language === 'error') {
         code = `<div class="code-error">${code}</div>`;
     }
@@ -318,6 +307,7 @@ async function copyCode() {
                 '--color-punctuation': colorPunctuation,
                 '--color-string': colorString,
                 '--color-title': colorTitle,
+                '--color-js-reserved': colorJsReserved,
                 '--color-variable-keyword': colorVariableKeyword,
                 '--font-family': fontFamily,
                 '--font-size': fontSize,
@@ -343,7 +333,7 @@ async function copyCode() {
 }
 
 .code-copy {
-    align-items:center;
+    align-items: center;
     background: transparent;
     border-radius: 0.5rem;
     border: none;
@@ -368,7 +358,7 @@ async function copyCode() {
     font-family: var(--font-family);
     font-size: var(--font-size);
     overflow-x: auto;
-    overflow-y:hidden;
+    overflow-y: hidden;
     overflow: auto;
     padding: var(--padding);
     white-space: pre-wrap;
@@ -417,7 +407,7 @@ async function copyCode() {
 }
 
 /* Strings */
-::v-deep(.code-string){
+::v-deep(.code-string) {
     color: var(--color-string);
 }
 
@@ -429,6 +419,7 @@ async function copyCode() {
 ::v-deep(.code-parens) {
     color: var(--color-parenthesis);
 }
+
 /* Commas, semicolons, colons */
 ::v-deep(.code-punctuation) {
     color: var(--color-punctuation);
@@ -444,12 +435,17 @@ async function copyCode() {
     color: var(--color-brackets);
 }
 
+::v-deep(.code-js-reserved) {
+    color: var(--color-js-reserved);
+}
+
 /* Comments */
 ::v-deep(.code-comment) {
     color: var(--color-comment);
     font-style: italic;
 }
-::v-deep(.code-comment) *{
+
+::v-deep(.code-comment) * {
     color: var(--color-comment) !important;
 }
 
@@ -467,10 +463,9 @@ async function copyCode() {
     color: var(--color-line-number);
     display: inline-block;
     font-size: 0.8rem;
-    font-style:normal;
+    font-style: normal;
     margin-right: 0.5em;
     text-align: right;
     width: 3ch;
 }
-
 </style>

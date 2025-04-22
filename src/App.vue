@@ -50,6 +50,20 @@ const contentError = ref(`TypeError: Cannot read properties of undefined (readin
   at get value (index.js:10:552)
 `)
 
+const contentTs = ref(`
+type Test = {
+  attr: 'value'
+}
+
+const myVar: Array<Test>()
+
+  if (test > 1) {
+    return 1
+  }
+
+const str = new String('str');
+`)
+
 </script>
 
 <template>
@@ -101,8 +115,12 @@ const contentError = ref(`TypeError: Cannot read properties of undefined (readin
       :content="contentHTML"
       language="html"
     />
+    <TestVueHiCode
+      :content="contentTs"
+      language="typescript"
+    />
     <VueHiCode 
-    with-copy
+      with-copy
       with-line-numbers
       :content="contentJs" 
       language="javascript"
