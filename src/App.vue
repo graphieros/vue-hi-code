@@ -66,6 +66,7 @@ const str = new String('str');
 type Thing = {}
 
 const thing = {
+  type?: 'stuff',
   type: 'stuff'
 }
 `)

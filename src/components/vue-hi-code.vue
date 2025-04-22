@@ -202,9 +202,7 @@ function highlightCode(code, language) {
         ])
     );
     // only match keywords not immediately followed by optional whitespace + colon
-    const keywordsPattern = new RegExp(
-        `\\b(?:${allKeywords.join('|')})\\b(?!\\s*:)`, 'g'
-    );
+    const keywordsPattern = new RegExp(`\\b(?:${allKeywords.join('|')})\\b(?!\\s*[:?])`, 'g');
 
     // 3) Other token patterns
     const functionNamePattern = /\b([a-zA-Z_]\w*)\s*(?=\()/g;
