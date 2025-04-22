@@ -180,105 +180,108 @@ function highlightCode(code, language) {
             .replace(/<\/span>\s*(?=\w)/g, '</span>\n')
 
     } else if (['javascript', 'typescript'].includes(language)) {
-        // 1) Temporarily preserve generics with non-word delimiters
-        code = code.replace(/</g, '‹').replace(/>/g, '›');
+    // 1) Temporarily preserve generics with non-word delimiters
+    code = code.replace(/</g, '‹').replace(/>/g, '›');
 
-        // 2) JS & TS keywords
-        const baseKeywords = [
-            'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while',
-            'switch', 'case', 'break', 'continue', 'try', 'catch', 'throw', 'class',
-            'extends', 'import', 'export', 'default', 'new', 'async', 'await'
-        ];
-        const tsKeywords = [
-            'type', 'interface', 'enum', 'implements', 'public', 'private', 'protected',
-            'readonly', 'abstract', 'namespace', 'declare', 'module', 'as',
-            'keyof', 'infer', 'instanceof', 'typeof', 'never', 'unknown', 'any', 'void',
-            'boolean', 'number', 'string', 'symbol', 'bigint'
-        ];
-        const allKeywords = Array.from(
-            new Set([
-                ...baseKeywords,
-                ...(language === 'typescript' ? tsKeywords : [])
-            ])
-        );
-        const keywordsPattern = new RegExp(`\\b(?:${allKeywords.join('|')})\\b`, 'g');
+    // 2) JS & TS keywords
+    const baseKeywords = [
+        'const', 'let', 'var', 'function', 'return', 'if', 'else', 'for', 'while',
+        'switch', 'case', 'break', 'continue', 'try', 'catch', 'throw', 'class',
+        'extends', 'import', 'export', 'default', 'new', 'async', 'await'
+    ];
+    const tsKeywords = [
+        'type', 'interface', 'enum', 'implements', 'public', 'private', 'protected',
+        'readonly', 'abstract', 'namespace', 'declare', 'module', 'from', 'as',
+        'keyof', 'infer', 'instanceof', 'typeof', 'never', 'unknown', 'any', 'void',
+        'boolean', 'number', 'string', 'symbol', 'bigint'
+    ];
+    const allKeywords = Array.from(
+        new Set([
+            ...baseKeywords,
+            ...(language === 'typescript' ? tsKeywords : [])
+        ])
+    );
+    // only match keywords not immediately followed by optional whitespace + colon
+    const keywordsPattern = new RegExp(
+        `\\b(?:${allKeywords.join('|')})\\b(?!\\s*:)`, 'g'
+    );
 
-        // 3) Other token patterns
-        const functionNamePattern = /\b([a-zA-Z_]\w*)\s*(?=\()/g;
-        const stringPattern = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
-        const commentPattern = /(\/\*[\s\S]*?\*\/|\/\/.*)/g;
-        const variablePattern = /(?<!["'`])\b(?:const|let|var)\b\s+([A-Za-z_$][\w$]*)(?!["'`])(?=(?:[^"'`]*["'`][^"'`]*["'`])*[^"'`]*$)/g;
-        const numberPattern = /\b\d+(\.\d+)?\b/g;
+    // 3) Other token patterns
+    const functionNamePattern = /\b([a-zA-Z_]\w*)\s*(?=\()/g;
+    const stringPattern       = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
+    const commentPattern      = /(\/\*[\s\S]*?\*\/|\/\/.*)/g;
+    const variablePattern     = /(?<!["'`])\b(?:const|let|var)\b\s+([A-Za-z_$][\w$]*)(?!["'`])(?=(?:[^"'`]*["'`][^"'`]*["'`])*[^"'`]*$)/g;
+    const numberPattern       = /\b\d+(\.\d+)?\b/g;
 
-        // 4) Placeholder storage
-        const placeholders = { keys: [], vars: [], strs: [], comms: [], nums: [] };
+    // 4) Placeholder storage
+    const placeholders = { keys: [], vars: [], strs: [], comms: [], nums: [] };
 
-        let tmp = code
-            // preserve variable keywords
-            .replace(variablePattern, (m, v) => {
-                placeholders.keys.push(m.split(' ')[0]);
-                placeholders.vars.push(v);
-                return `__KEYWORD_PLACEHOLDER_${placeholders.keys.length - 1}__ ${v}`;
-            })
-            // strings
-            .replace(stringPattern, m => {
-                placeholders.strs.push(m);
-                return `__STRING_PLACEHOLDER_${placeholders.strs.length - 1}__`;
-            })
-            // comments
-            .replace(commentPattern, m => {
-                placeholders.comms.push(m);
-                return `__COMMENT_PLACEHOLDER_${placeholders.comms.length - 1}__`;
-            })
-            // numbers
-            .replace(numberPattern, m => {
-                placeholders.nums.push(m);
-                return `__NUMBER_PLACEHOLDER_${placeholders.nums.length - 1}__`;
-            });
+    let tmp = code
+        // preserve variable keywords
+        .replace(variablePattern, (m, v) => {
+            placeholders.keys.push(m.split(' ')[0]);
+            placeholders.vars.push(v);
+            return `__KEYWORD_PLACEHOLDER_${placeholders.keys.length - 1}__ ${v}`;
+        })
+        // strings
+        .replace(stringPattern, m => {
+            placeholders.strs.push(m);
+            return `__STRING_PLACEHOLDER_${placeholders.strs.length - 1}__`;
+        })
+        // comments
+        .replace(commentPattern, m => {
+            placeholders.comms.push(m);
+            return `__COMMENT_PLACEHOLDER_${placeholders.comms.length - 1}__`;
+        })
+        // numbers
+        .replace(numberPattern, m => {
+            placeholders.nums.push(m);
+            return `__NUMBER_PLACEHOLDER_${placeholders.nums.length - 1}__`;
+        });
 
-        // 5) Highlight keywords & function calls
-        tmp = tmp
-            .replace(keywordsPattern, '<span class="code-keyword">$&</span>')
-            .replace(functionNamePattern, '<span class="code-function">$1</span>');
+    // 5) Highlight keywords & function calls
+    tmp = tmp
+        .replace(keywordsPattern, '<span class="code-keyword">$&</span>')
+        .replace(functionNamePattern, '<span class="code-function">$1</span>');
 
-        // 6) Restore placeholders & punctuation
-        tmp = tmp
-            .replace(/__COMMENT_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-comment">${placeholders.comms[i]}</span>`)
-            .replace(/__STRING_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-string">${placeholders.strs[i]}</span>`)
-            .replace(/__KEYWORD_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-variable-keyword">${placeholders.keys[i]}</span>`)
-            .replace(/__NUMBER_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-number">${placeholders.nums[i]}</span>`)
-            .replace(/\(/g, `<span class="code-parens">(</span>`)
-            .replace(/\)/g, `<span class="code-parens">)</span>`)
-            .replace(/\{/g, `<span class="code-parens">{</span>`)
-            .replace(/\}/g, `<span class="code-parens">}</span>`)
-            .replace(/\[/g, `<span class="code-brackets">[</span>`)
-            .replace(/\]/g, `<span class="code-brackets">]</span>`)
-            .replace(/;/g, `<span class="code-punctuation">;</span>`)
-            .replace(/\./g, `<span class="code-punctuation">.</span>`)
-            .replace(/,/g, `<span class="code-punctuation">,</span>`);
+    // 6) Restore placeholders & punctuation
+    tmp = tmp
+        .replace(/__COMMENT_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-comment">${placeholders.comms[i]}</span>`)
+        .replace(/__STRING_PLACEHOLDER_(\d+)__/g,  (_, i) => `<span class="code-string">${placeholders.strs[i]}</span>`)
+        .replace(/__KEYWORD_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-variable-keyword">${placeholders.keys[i]}</span>`)
+        .replace(/__NUMBER_PLACEHOLDER_(\d+)__/g,  (_, i) => `<span class="code-number">${placeholders.nums[i]}</span>`)
+        .replace(/\(/g, `<span class="code-parens">(</span>`)
+        .replace(/\)/g, `<span class="code-parens">)</span>`)
+        .replace(/\{/g, `<span class="code-parens">{</span>`)
+        .replace(/\}/g, `<span class="code-parens">}</span>`)
+        .replace(/\[/g, `<span class="code-brackets">[</span>`)
+        .replace(/\]/g, `<span class="code-brackets">]</span>`)
+        .replace(/;/g, `<span class="code-punctuation">;</span>`)
+        .replace(/\./g, `<span class="code-punctuation">.</span>`)
+        .replace(/,/g, `<span class="code-punctuation">,</span>`);
 
-        // 7) Restore generics angle brackets
-        tmp = tmp
-            .replace(/‹/g, `<span class="code-brackets">&lt;</span>`)
-            .replace(/›/g, `<span class="code-brackets">&gt;</span>`);
+    // 7) Restore generics angle brackets
+    tmp = tmp
+        .replace(/‹/g, `<span class="code-brackets">&lt;</span>`)
+        .replace(/›/g, `<span class="code-brackets">&gt;</span>`);
 
-        // 8) Highlight reserved globals & TS utility types
-        const reservedGlobals = [
-            'Array', 'String', 'RegExp', 'Date', 'Promise', 'Map', 'Set', 'WeakMap', 'WeakSet',
-            'Symbol', 'Math', 'JSON', 'Reflect', 'Proxy'
-        ];
-        const tsUtils = [
-            'Partial', 'Required', 'Readonly', 'Record', 'Pick', 'Omit', 'Exclude', 'Extract',
-            'NonNullable', 'Parameters', 'ReturnType', 'InstanceType', 'ConstructorParameters',
-            'ThisType'
-        ];
-        const reservedPattern = new RegExp(
-            `\\b(?:${[...reservedGlobals, ...tsUtils].join('|')})\\b`, 'g'
-        );
-        tmp = tmp.replace(reservedPattern, '<span class="code-js-reserved">$&</span>');
+    // 8) Highlight reserved globals & TS utility types
+    const reservedGlobals = [
+        'Array','String','RegExp','Date','Promise','Map','Set','WeakMap','WeakSet',
+        'Symbol','Math','JSON','Reflect','Proxy'
+    ];
+    const tsUtils = [
+        'Partial','Required','Readonly','Record','Pick','Omit','Exclude','Extract',
+        'NonNullable','Parameters','ReturnType','InstanceType','ConstructorParameters',
+        'ThisType'
+    ];
+    const reservedPattern = new RegExp(
+        `\\b(?:${[...reservedGlobals, ...tsUtils].join('|')})\\b`, 'g'
+    );
+    tmp = tmp.replace(reservedPattern, '<span class="code-js-reserved">$&</span>');
 
-        // 9) Commit back
-        code = tmp;
+    // 9) Commit back
+    code = tmp;
     } else if (language === 'error') {
         code = `<div class="code-error">${code}</div>`;
     }
