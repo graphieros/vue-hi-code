@@ -191,7 +191,7 @@ function highlightCode(code, language) {
         ];
         const tsKeywords = [
             'type', 'interface', 'enum', 'implements', 'public', 'private', 'protected',
-            'readonly', 'abstract', 'namespace', 'declare', 'module', 'from', 'as',
+            'readonly', 'abstract', 'namespace', 'declare', 'module', 'as',
             'keyof', 'infer', 'instanceof', 'typeof', 'never', 'unknown', 'any', 'void',
             'boolean', 'number', 'string', 'symbol', 'bigint'
         ];
