@@ -78,12 +78,16 @@ const thing = {
     <TestVueHiCode
       language="css"
       :content="contentCSS"
+      showIcon
+      title="css"
     />
 
     <TestVueHiCode
       :content="contentError"
       language="error"
       color-error="#E46962"
+      showIcon
+      title="error"
     />
 
     <TestVueHiCode
@@ -116,15 +120,18 @@ const thing = {
       :copy-icon-stroke-width="1.5"
       color-css-selector="#D7BA7D"
       line-height="1.4rem"
+      :show-icon="true"
     >
     </TestVueHiCode>
     <TestVueHiCode
       :content="contentHTML"
       language="html"
+      showIcon
     />
     <TestVueHiCode
       :content="contentTs"
       language="typescript"
+      showIcon
     />
     <VueHiCode 
       with-copy

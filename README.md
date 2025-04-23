@@ -57,6 +57,7 @@ cosnt foo = function(param) {
 | language             | "javascript" or "html" or "css" | yes      |                          |
 | lineHeight           | string                          | no       | "1.4rem"                 |
 | padding              | string                          | no       | "1rem"                   |
+| showIcon             | boolean                         | no       | false                    |
 | title                | string                          | no       | ""                       |
 | withCopy             | boolean                         | no       | true                     |
 | withLineNumbers      | boolean                         | no       | false                    |

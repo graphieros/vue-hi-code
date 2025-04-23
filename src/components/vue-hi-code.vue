@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import IconCopy from "./IconCopy.vue";
+import IconLang from './IconLang.vue';
 
 const props = defineProps({
     content: {
@@ -137,6 +138,10 @@ const props = defineProps({
         type: String,
         default: '#D7BA7D'
     },
+    showIcon: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const emit = defineEmits(['copy']);
@@ -287,7 +292,7 @@ function highlightCode(code, language) {
     let codeWithTitle = code;
 
     if (props.title) {
-        codeWithTitle = `<div class="code-title">${props.title}</div>\n${code}`;
+        codeWithTitle = `<div class="code-title ${props.showIcon ? 'code-title-with-icon' : ''}">${props.title}</div>\n${code}`;
     }
 
     if (props.withLineNumbers) {
@@ -320,6 +325,9 @@ async function copyCode() {
 
 <template>
     <code class="code-wrapper">
+        <div class="code-icon" v-if="showIcon">
+            <IconLang :language="language"/>
+        </div>
         <button 
             v-if="withCopy" class="code-copy"
             @click="copyCode"
@@ -333,7 +341,7 @@ async function copyCode() {
         </button>
         <pre 
             v-html="highlightedCode.codeWithTitle" 
-            class="code-container"
+            :class="`code-container ${showIcon && !title ? 'code-container-icon-notitle' : ''}`"
             ref="codeContent"
             :style="{
                 '--background-color': backgroundColor,
@@ -394,6 +402,12 @@ async function copyCode() {
     box-shadow: 0 6px 12px #1A1A1A80;
 }
 
+.code-icon {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+}
+
 .code-container {
     background-color: var(--background-color);
     border-radius: var(--border-radius);
@@ -407,6 +421,10 @@ async function copyCode() {
     white-space: pre-wrap;
     word-wrap: break-word;
     line-height: var(--line-height);
+}
+
+.code-container-icon-notitle {
+    padding-top: 3rem;
 }
 
 .error-wrapper {
@@ -428,6 +446,14 @@ async function copyCode() {
     font-family: var(--title-font-family);
     font-size: var(--title-font-size);
     padding: 0.5rem 0 1rem 0;
+}
+
+::v-deep(.code-title-with-icon) {
+    border-bottom: 1px solid grey;
+    color: var(--color-title);
+    font-family: var(--title-font-family);
+    font-size: var(--title-font-size);
+    padding: 0.5rem 0 1rem 2rem;
 }
 
 /* Keyword Styles */
