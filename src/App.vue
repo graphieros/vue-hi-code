@@ -11,6 +11,7 @@ const num = 33.33;
 const variableName = 'variable__name';
 const BIG_CONST = () => {};
 const operations = 1 + 2 - 3 / (4 * 8);
+const arr = [];
 
 async function copyCode() {
     try {
@@ -37,7 +38,7 @@ div::after {
   content: ''; /* and this is a comment */
 }
 
-button.dude > span:not(.moron) ~ .cock {
+button.test > span:not(.smth) ~ .selector {
   color: red;
   font-size: 12px;
   background: radial-gradient(at top left, #6376DD, #FFFFFF);
@@ -113,6 +114,7 @@ const thing = {
       color-parenthesis="#8A8A8A"
       color-punctuation="#E1E5E8"
       color-brackets="#559AD3"
+      color-curly-brackets="##8A8A8A"
       color-comment="#8A8A8A"
       copy-icon-color="#CCCCCC"
       color-line-number="#8A8A8A"

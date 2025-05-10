@@ -109,6 +109,10 @@ const props = defineProps({
         type: String,
         default: "#8A8A8A"
     },
+    colorCurlyBrackets: {
+        type: String,
+        default: "#8A8A8A"
+    },
     colorPunctuation: {
         type: String,
         default: '#E1E5E8'
@@ -255,8 +259,8 @@ function highlightCode(code, language) {
         .replace(/__NUMBER_PLACEHOLDER_(\d+)__/g,  (_, i) => `<span class="code-number">${placeholders.nums[i]}</span>`)
         .replace(/\(/g, `<span class="code-parens">(</span>`)
         .replace(/\)/g, `<span class="code-parens">)</span>`)
-        .replace(/\{/g, `<span class="code-parens">{</span>`)
-        .replace(/\}/g, `<span class="code-parens">}</span>`)
+        .replace(/\{/g, `<span class="code-curly-bracket">{</span>`)
+        .replace(/\}/g, `<span class="code-curly-bracket">}</span>`)
         .replace(/\[/g, `<span class="code-brackets">[</span>`)
         .replace(/\]/g, `<span class="code-brackets">]</span>`)
         .replace(/;/g, `<span class="code-punctuation">;</span>`)
@@ -265,8 +269,8 @@ function highlightCode(code, language) {
 
     // 7) Restore generics angle brackets
     tmp = tmp
-        .replace(/‹/g, `<span class="code-brackets">&lt;</span>`)
-        .replace(/›/g, `<span class="code-brackets">&gt;</span>`);
+        .replace(/‹/g, `<span>&lt;</span>`)
+        .replace(/›/g, `<span>&gt;</span>`);
 
     // 8) Highlight reserved globals & TS utility types
     const reservedGlobals = [
@@ -355,6 +359,7 @@ async function copyCode() {
                 '--color-line-number': colorLineNumber,
                 '--color-number': colorNumber,
                 '--color-parenthesis': colorParenthesis,
+                '--color-curly-bracket': colorCurlyBrackets,
                 '--color-punctuation': colorPunctuation,
                 '--color-string': colorString,
                 '--color-title': colorTitle,
@@ -487,6 +492,11 @@ async function copyCode() {
 /* Parenthesis */
 ::v-deep(.code-parens) {
     color: var(--color-parenthesis);
+}
+
+/* Curly brackets */
+::v-deep(.code-curly-bracket) {
+    color: var(--color-curly-bracket);
 }
 
 /* Commas, semicolons, colons */
