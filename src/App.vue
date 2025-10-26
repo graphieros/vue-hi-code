@@ -5,22 +5,7 @@ import { ref } from "vue";
 
 import TestVueHiCode from "./components/vue-hi-code.vue";
 
-const contentJs = ref(`// Not all comments are bad...
-
-const num = 33.33;
-const variableName = 'variable__name';
-const BIG_CONST = () => {};
-const operations = 1 + 2 - 3 / (4 * 8);
-const arr = [];
-
-async function copyCode() {
-    try {
-        await navigator.clipboard.writeText(props.content);
-        emit('copy.test', props.content);
-    } catch (err) {
-        console.error('Failed to copy text: ', err);
-    }
-}`)
+const contentJs = ref(0)
 
 const contentHTML = ref(`<div class="flex flex-col gap-1">
   <!-- This is a comment -->

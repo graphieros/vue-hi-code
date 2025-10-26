@@ -5,7 +5,7 @@ import IconLang from './IconLang.vue';
 
 const props = defineProps({
     content: {
-        type: String,
+        type: [String, Number],
         required: true,
     },
     language: {
@@ -190,7 +190,7 @@ function highlightCode(code, language) {
 
     } else if (['javascript', 'typescript'].includes(language)) {
     // 1) Temporarily preserve generics with non-word delimiters
-    code = code.replace(/</g, '‹').replace(/>/g, '›');
+    code = String(code).replace(/</g, '‹').replace(/>/g, '›');
 
     // 2) JS & TS keywords
     const baseKeywords = [
