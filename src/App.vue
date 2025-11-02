@@ -41,6 +41,8 @@ type Test = {
   attr: 'value'
 }
 
+const special = [null, Infinity, -Infinity, undefined, NaN];
+
 const myVar: Array<Test>()
 
   if (test > 1) {

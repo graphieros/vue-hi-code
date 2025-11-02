@@ -49,6 +49,7 @@ cosnt foo = function(param) {
 | colorParenthesis     | string                          | no       | "#8A8A8A"                |
 | colorString          | string                          | no       | "#CD9077"                |
 | colorVariableKeyword | string                          | no       | "#559AD3"                |
+| colorSpecial         | string                          | no       | "#559AD3"                |
 | content              | string                          | yes      |                          |
 | copyIconColor        | string                          | no       | "#CCCCCC"                |
 | copyIconSize         | number                          | no       | 20                       |

@@ -93,6 +93,10 @@ const props = defineProps({
         type: String,
         default: '#559AD3'
     },
+    colorSpecial: {
+        type: String,
+        default: '#559AD3',
+    },
     colorFunction: {
         type: String,
         default: '#DCDCAA'
@@ -215,13 +219,14 @@ function highlightCode(code, language) {
 
     // 3) Other token patterns
     const functionNamePattern = /\b([a-zA-Z_]\w*)\s*(?=\()/g;
-    const stringPattern       = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
-    const commentPattern      = /(\/\*[\s\S]*?\*\/|\/\/.*)/g;
-    const variablePattern     = /(?<!["'`])\b(?:const|let|var)\b\s+([A-Za-z_$][\w$]*)(?!["'`])(?=(?:[^"'`]*["'`][^"'`]*["'`])*[^"'`]*$)/g;
-    const numberPattern       = /\b\d+(\.\d+)?\b/g;
+    const stringPattern = /(["'`])(?:(?=(\\?))\2.)*?\1/g;
+    const commentPattern = /(\/\*[\s\S]*?\*\/|\/\/.*)/g;
+    const variablePattern = /(?<!["'`])\b(?:const|let|var)\b\s+([A-Za-z_$][\w$]*)(?!["'`])(?=(?:[^"'`]*["'`][^"'`]*["'`])*[^"'`]*$)/g;
+    const numberPattern = /\b\d+(\.\d+)?\b/g;
+    const specialPattern = /(?<![\w$])(?:-?Infinity|NaN|null|undefined)(?![\w$])/g;
 
     // 4) Placeholder storage
-    const placeholders = { keys: [], vars: [], strs: [], comms: [], nums: [] };
+    const placeholders = { keys: [], vars: [], strs: [], comms: [], nums: [], special: [] };
 
     let tmp = code
         // preserve variable keywords
@@ -244,6 +249,11 @@ function highlightCode(code, language) {
         .replace(numberPattern, m => {
             placeholders.nums.push(m);
             return `__NUMBER_PLACEHOLDER_${placeholders.nums.length - 1}__`;
+        })
+        // special
+        .replace(specialPattern, m => {
+            placeholders.special.push(m);
+            return `__SPECIAL_PLACEHOLDER_${placeholders.special.length - 1}__`;
         });
 
     // 5) Highlight keywords & function calls
@@ -257,6 +267,7 @@ function highlightCode(code, language) {
         .replace(/__STRING_PLACEHOLDER_(\d+)__/g,  (_, i) => `<span class="code-string">${placeholders.strs[i]}</span>`)
         .replace(/__KEYWORD_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-variable-keyword">${placeholders.keys[i]}</span>`)
         .replace(/__NUMBER_PLACEHOLDER_(\d+)__/g,  (_, i) => `<span class="code-number">${placeholders.nums[i]}</span>`)
+        .replace(/__SPECIAL_PLACEHOLDER_(\d+)__/g, (_, i) => `<span class="code-special">${placeholders.special[i]}</span>`)
         .replace(/\(/g, `<span class="code-parens">(</span>`)
         .replace(/\)/g, `<span class="code-parens">)</span>`)
         .replace(/\{/g, `<span class="code-curly-bracket">{</span>`)
@@ -358,6 +369,7 @@ async function copyCode() {
                 '--color-keywords': colorKeywords,
                 '--color-line-number': colorLineNumber,
                 '--color-number': colorNumber,
+                '--color-special': colorSpecial,
                 '--color-parenthesis': colorParenthesis,
                 '--color-curly-bracket': colorCurlyBrackets,
                 '--color-punctuation': colorPunctuation,
@@ -476,8 +488,14 @@ async function copyCode() {
     color: var(--color-function);
 }
 
+/* Numbers */
 ::v-deep(.code-number) {
     color: var(--color-number);
+}
+
+/* Special values */
+::v-deep(.code-special) {
+    color: var(--color-special);
 }
 
 /* Strings */
