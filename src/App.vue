@@ -41,7 +41,7 @@ type Test = {
   attr: 'value'
 }
 
-const special = [null, Infinity, -Infinity, undefined, NaN];
+const special = [null, Infinity, -Infinity, undefined, NaN, true, false];
 
 const myVar: Array<Test>()
 

@@ -223,7 +223,7 @@ function highlightCode(code, language) {
     const commentPattern = /(\/\*[\s\S]*?\*\/|\/\/.*)/g;
     const variablePattern = /(?<!["'`])\b(?:const|let|var)\b\s+([A-Za-z_$][\w$]*)(?!["'`])(?=(?:[^"'`]*["'`][^"'`]*["'`])*[^"'`]*$)/g;
     const numberPattern = /\b\d+(\.\d+)?\b/g;
-    const specialPattern = /(?<![\w$])(?:-?Infinity|NaN|null|undefined)(?![\w$])/g;
+    const specialPattern = /(?<![\w$])(?:-?Infinity|NaN|null|undefined|true|false)(?![\w$])/g;
 
     // 4) Placeholder storage
     const placeholders = { keys: [], vars: [], strs: [], comms: [], nums: [], special: [] };
