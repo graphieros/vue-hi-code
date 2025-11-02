@@ -61,6 +61,7 @@ cosnt foo = function(param) {
 | padding              | string                          | no       | "1rem"                   |
 | showIcon             | boolean                         | no       | false                    |
 | title                | string                          | no       | ""                       |
+| tsTypesCustom        | string[]                        | no       | []                       |
 | withCopy             | boolean                         | no       | true                     |
 | withLineNumbers      | boolean                         | no       | false                    |
 

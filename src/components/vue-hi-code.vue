@@ -149,6 +149,12 @@ const props = defineProps({
     showIcon: {
         type: Boolean,
         default: false
+    },
+    tsTypesCustom: {
+        type: Array,
+        default() {
+            return []
+        }
     }
 });
 
@@ -288,7 +294,7 @@ function highlightCode(code, language) {
         'Array','String','RegExp','Date','Promise','Map','Set','WeakMap','WeakSet',
         'Symbol','Math','JSON','Reflect','Proxy'
     ];
-    const tsUtils = [
+    const tsUtils = [...props.tsTypesCustom,
         'Partial','Required','Readonly','Record','Pick','Omit','Exclude','Extract',
         'NonNullable','Parameters','ReturnType','InstanceType','ConstructorParameters',
         'ThisType'

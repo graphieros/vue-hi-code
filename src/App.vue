@@ -57,6 +57,8 @@ const thing = {
   type?: 'stuff',
   type: 'stuff'
 }
+
+const obj: VueUiXyConfig = {};
 `)
 
 </script>
@@ -110,6 +112,7 @@ const thing = {
       color-css-selector="#D7BA7D"
       line-height="1.4rem"
       :show-icon="true"
+      
     >
     </TestVueHiCode>
     <TestVueHiCode
@@ -121,6 +124,10 @@ const thing = {
       :content="contentTs"
       language="typescript"
       showIcon
+      :ts-types-custom="[
+        'VueUiXyConfig',
+        'Test'
+      ]"
     />
     <VueHiCode 
       with-copy
